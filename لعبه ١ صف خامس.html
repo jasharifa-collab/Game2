@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>رحلة عبر الزمن التكنولوجي</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Tahoma, Arial, sans-serif;
+    }
+
+    :root {
+      --blue: #0d3b66;
+      --sky: #00b4d8;
+      --yellow: #ffd166;
+      --green: #2ec4b6;
+      --red: #ef476f;
+      --light: #f8fbff;
+      --dark: #1f2a44;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 10% 15%, rgba(255, 209, 102, 0.35), transparent 24%),
+        radial-gradient(circle at 90% 20%, rgba(0, 180, 216, 0.23), transparent 28%),
+        linear-gradient(135deg, #e8f7ff, #fff7dd);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      color: var(--dark);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1220px;
+      min-height: 710px;
+      background: rgba(255,255,255,0.94);
+      border-radius: 34px;
+      box-shadow: 0 24px 60px rgba(13, 59, 102, 0.18);
+      overflow: hidden;
+      padding: 26px;
+      border: 4px solid #fff;
+      position: relative;
+    }
+
+    .hidden { display: none !important; }
+
+    .screen {
+      min-height: 650px;
+      border-radius: 28px;
+      animation: fadeIn 0.45s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* شاشة البداية */
+    #introScreen {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: center;
+      padding: 34px;
+      background:
+        linear-gradient(135deg, rgba(13, 59, 102, 0.06), rgba(255, 209, 102, 0.18)),
+        #ffffff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .intro-copy {
+      background: #ffffff;
+      border-radius: 30px;
+      padding: 34px;
+      box-shadow: 0 14px 35px rgba(13, 59, 102, 0.12);
+      border: 2px solid #edf2f7;
+      position: relative;
+      z-index: 2;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #eaf7ff;
+      color: var(--blue);
+      border: 2px solid #cbe7ff;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: bold;
+      margin-bottom: 14px;
+      font-size: 15px;
+    }
+
+    h1 {
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.18;
+      color: var(--blue);
+      margin-bottom: 18px;
+    }
+
+    .intro-copy p {
+      font-size: 22px;
+      line-height: 1.9;
+      color: #41536b;
+      margin-bottom: 22px;
+    }
+
+    .mission-box {
+      background: #fff8e8;
+      border: 2px solid #ffe3a3;
+      border-radius: 22px;
+      padding: 16px 18px;
+      font-size: 18px;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .start-btn,
+    .action-btn,
+    .popup-btn,
+    .restart-btn {
+      border: none;
+      cursor: pointer;
+      border-radius: 18px;
+      padding: 15px 30px;
+      font-size: 20px;
+      font-weight: bold;
+      transition: 0.25s ease;
+    }
+
+    .start-btn,
+    .popup-btn {
+      background: linear-gradient(135deg, #0d6efd, var(--sky));
+      color: white;
+      box-shadow: 0 10px 22px rgba(13, 110, 253, 0.22);
+    }
+
+    .start-btn:hover,
+    .action-btn:hover,
+    .popup-btn:hover,
+    .restart-btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .intro-visual {
+      position: relative;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .time-machine {
+      width: min(410px, 100%);
+      min-height: 430px;
+      border-radius: 42px;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.8), transparent 35%),
+        linear-gradient(155deg, #0d3b66, #00b4d8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 24px 45px rgba(13, 59, 102, 0.25);
+      position: relative;
+      overflow: hidden;
+      border: 5px solid #ffffff;
+    }
+
+    .time-machine::before {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.16);
+      border: 12px solid rgba(255,255,255,0.34);
+    }
+
+    .machine-icons {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(2, 100px);
+      gap: 18px;
+    }
+
+    .machine-icons span {
+      width: 100px;
+      height: 100px;
+      background: rgba(255,255,255,0.93);
+      border-radius: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.13);
+    }
+
+    .float-label {
+      position: absolute;
+      background: white;
+      border-radius: 18px;
+      padding: 10px 14px;
+      box-shadow: 0 8px 20px rgba(13,59,102,0.16);
+      border: 2px solid #edf2f7;
+      font-weight: bold;
+      color: var(--blue);
+    }
+
+    .l1 { top: 50px; right: 10px; }
+    .l2 { bottom: 55px; left: 10px; }
+
+    /* شاشة اللعبة */
+    #gameScreen {
+      padding: 24px;
+      background: linear-gradient(180deg, #ffffff, #f8fbff);
+    }
+
+    .top-bar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    h2 {
+      font-size: clamp(28px, 4vw, 40px);
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+
+    .instructions {
+      font-size: 18px;
+      color: #52616b;
+      line-height: 1.7;
+    }
+
+    .stats {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .stat-card {
+      min-width: 140px;
+      background: white;
+      border: 2px solid #edf2f7;
+      box-shadow: 0 8px 18px rgba(13,59,102,0.08);
+      border-radius: 20px;
+      padding: 12px 16px;
+      text-align: center;
+      font-weight: bold;
+      color: var(--blue);
+    }
+
+    .progress-box {
+      grid-column: 1 / -1;
+      background: #eef7ff;
+      border: 2px solid #cbe7ff;
+      border-radius: 18px;
+      padding: 12px 14px;
+    }
+
+    .progress-text {
+      font-weight: bold;
+      margin-bottom: 7px;
+      color: var(--blue);
+    }
+
+    .progress-track {
+      height: 16px;
+      background: #d7e9f7;
+      border-radius: 50px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), #0d6efd);
+      transition: 0.35s;
+    }
+
+    .story-strip {
+      background: #fff8e8;
+      border: 2px solid #ffe3a3;
+      border-radius: 24px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      line-height: 1.7;
+      font-size: 18px;
+    }
+
+    .story-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      flex-shrink: 0;
+    }
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: 0.92fr 1.45fr;
+      gap: 22px;
+    }
+
+    .panel {
+      background: white;
+      border-radius: 26px;
+      padding: 20px;
+      border: 2px solid #edf2f7;
+      box-shadow: 0 12px 28px rgba(13,59,102,0.08);
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--blue);
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+
+    .action-btn {
+      background: #eaf7ff;
+      color: var(--blue);
+      border: 2px solid #cbe7ff;
+      padding: 10px 16px;
+      font-size: 15px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .drag-card {
+      min-height: 160px;
+      background: #f8fbff;
+      border: 3px dashed #90e0ef;
+      border-radius: 24px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      cursor: grab;
+      text-align: center;
+      user-select: none;
+      transition: 0.25s;
+    }
+
+    .drag-card:hover {
+      transform: translateY(-4px) rotate(-1deg);
+      box-shadow: 0 12px 22px rgba(13,59,102,0.12);
+      background: #ffffff;
+    }
+
+    .drag-card.dragging {
+      opacity: 0.5;
+      transform: scale(0.96);
+    }
+
+    .visual-card {
+      width: 96px;
+      height: 96px;
+      border-radius: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 54px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.95), rgba(234,247,255,0.9));
+      border: 2px solid #edf2f7;
+      box-shadow: inset 0 0 0 4px rgba(255,255,255,0.6);
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: bold;
+      color: #26384f;
+    }
+
+    .card-hint {
+      font-size: 13px;
+      color: #6c7a89;
+      line-height: 1.5;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+      position: relative;
+    }
+
+    .drop-zone {
+      min-height: 126px;
+      background: #f8fbff;
+      border: 3px dashed #b8c7d9;
+      border-radius: 24px;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 135px 1fr;
+      gap: 14px;
+      align-items: center;
+      position: relative;
+      transition: 0.25s;
+    }
+
+    .drop-zone::before {
+      content: attr(data-number);
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      width: 38px;
+      height: 38px;
+      background: var(--blue);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      box-shadow: 0 8px 16px rgba(13,59,102,0.2);
+    }
+
+    .drop-zone.hover {
+      background: #eaf7ff;
+      border-color: #0d6efd;
+      transform: scale(1.01);
+    }
+
+    .drop-zone.correct {
+      background: #eafff5;
+      border-color: var(--green);
+      border-style: solid;
+    }
+
+    .zone-name {
+      background: var(--blue);
+      color: white;
+      border-radius: 18px;
+      padding: 16px 10px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      line-height: 1.5;
+    }
+
+    .zone-content {
+      min-height: 86px;
+      border-radius: 18px;
+      border: 2px solid #edf2f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6c757d;
+      text-align: center;
+      padding: 10px;
+      background: #ffffff;
+      line-height: 1.6;
+    }
+
+    .small-result {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-weight: bold;
+      color: #1f2a44;
+    }
+
+    .small-result .visual-card {
+      width: 64px;
+      height: 64px;
+      font-size: 38px;
+      border-radius: 18px;
+    }
+
+    .message {
+      margin-top: 16px;
+      min-height: 62px;
+      background: #fff8e8;
+      border: 2px solid #ffe4a3;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 18px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #7a4f00;
+      line-height: 1.6;
+    }
+
+    .message.success {
+      background: #eafff5;
+      border-color: var(--green);
+      color: #087f5b;
+    }
+
+    .message.error {
+      background: #fff0f0;
+      border-color: #ff9bb0;
+      color: #c92a2a;
+      animation: shake 0.25s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-3px); }
+    }
+
+    .finish {
+      display: none;
+      margin-top: 16px;
+      background: linear-gradient(135deg, #eafff5, #eef7ff);
+      border: 2px solid var(--green);
+      border-radius: 24px;
+      padding: 22px;
+      text-align: center;
+    }
+
+    .finish.show { display: block; }
+
+    .finish h3 {
+      font-size: 32px;
+      color: #087f5b;
+      margin-bottom: 8px;
+    }
+
+    .stars {
+      font-size: 34px;
+      margin: 10px 0;
+    }
+
+    .restart-btn {
+      background: var(--yellow);
+      color: var(--dark);
+      margin-top: 14px;
+    }
+
+    /* Popup */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 59, 102, 0.48);
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 20px;
+    }
+
+    .popup-overlay.show { display: flex; }
+
+    .popup-card {
+      width: min(620px, 100%);
+      background: white;
+      border-radius: 30px;
+      padding: 30px;
+      text-align: center;
+      border: 4px solid var(--yellow);
+      box-shadow: 0 24px 55px rgba(0,0,0,0.25);
+      animation: pop 0.25s ease;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .popup-emoji {
+      width: 108px;
+      height: 108px;
+      border-radius: 30px;
+      margin: 0 auto 12px;
+      background: #f8fbff;
+      border: 2px solid #edf2f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 68px;
+    }
+
+    .popup-card h3 {
+      font-size: 32px;
+      color: var(--blue);
+      margin-bottom: 12px;
+    }
+
+    .popup-card p {
+      font-size: 21px;
+      line-height: 1.9;
+      margin-bottom: 20px;
+      color: #41536b;
+    }
+
+    .hint-modal {
+      display: none;
+      margin-top: 14px;
+      background: #eaf7ff;
+      border: 2px solid #cbe7ff;
+      border-radius: 20px;
+      padding: 14px;
+      color: var(--blue);
+      line-height: 1.8;
+      font-weight: bold;
+    }
+
+    .hint-modal.show { display: block; }
+
+    @media (max-width: 940px) {
+      #introScreen,
+      .game-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .intro-visual {
+        min-height: 360px;
+      }
+
+      .top-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        justify-content: stretch;
+      }
+
+      .stat-card {
+        flex: 1;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .container {
+        padding: 14px;
+        border-radius: 24px;
+      }
+
+      #introScreen,
+      #gameScreen {
+        padding: 18px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .drop-zone {
+        grid-template-columns: 1fr;
+      }
+
+      .story-strip {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <section id="introScreen" class="screen">
+      <div class="intro-copy">
+        <div class="badge">🧭 مهمة تعليمية تفاعلية</div>
+        <h1>رحلة عبر الزمن التكنولوجي</h1>
+        <p>ساعد المستكشف الصغير على ترتيب أدوات الإنسان عبر الزمن، من الأدوات البسيطة إلى التكنولوجيا الحديثة.</p>
+        <div class="mission-box">
+          <strong>مهمتك:</strong> اسحب كل بطاقة إلى المرحلة الزمنية الصحيحة، واجمع النجوم في نهاية الرحلة.
+        </div>
+        <button class="start-btn" id="startButton" type="button">ابدأ الرحلة 🚀</button>
+      </div>
+
+      <div class="intro-visual">
+        <div class="float-label l1">قديم جدًا</div>
+        <div class="float-label l2">حديث جدًا</div>
+        <div class="time-machine">
+          <div class="machine-icons">
+            <span>🪓</span>
+            <span>🛞</span>
+            <span>🚂</span>
+            <span>📱</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gameScreen" class="screen hidden">
+      <div class="top-bar">
+        <div>
+          <h2>رتّب مراحل تطور الأدوات</h2>
+          <p class="instructions">اسحب كل صورة وضعها في مكانها الصحيح على الخط الزمني. انتبه: الترتيب يبدأ من الأقدم إلى الأحدث.</p>
+        </div>
+
+        <div class="stats">
+          <div class="stat-card" id="attemptsText">المحاولات: 0</div>
+          <div class="stat-card" id="scoreText">النقاط: 0 / 4</div>
+        </div>
+
+        <div class="progress-box">
+          <div class="progress-text" id="progressText">التقدم: 0%</div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="story-strip">
+        <div class="story-icon">🧒</div>
+        <div><strong>القصة:</strong> وجد سامي آلة زمن في مختبر المدرسة. حتى تعود الآلة للعمل، عليه ترتيب صور الأدوات حسب ظهورها عبر الزمن.</div>
+      </div>
+
+      <div class="game-grid">
+        <div class="panel">
+          <div class="panel-title">
+            <span>بطاقات الأدوات</span>
+            <button class="action-btn" id="hintButton" type="button">مساعدة 💡</button>
+          </div>
+
+          <div class="cards">
+            <div class="drag-card" draggable="true" data-id="modern">
+              <div class="visual-card">🚂</div>
+              <div class="card-title">الآلة البخارية والقطار</div>
+              <div class="card-hint">نقل وإنتاج أسرع</div>
+            </div>
+
+            <div class="drag-card" draggable="true" data-id="very-old">
+              <div class="visual-card">🪓</div>
+              <div class="card-title">الفأس الحجري والرمح</div>
+              <div class="card-hint">أدوات بسيطة للصيد والزراعة</div>
+            </div>
+
+            <div class="drag-card" draggable="true" data-id="very-modern">
+              <div class="visual-card">📱</div>
+              <div class="card-title">السيارة والهاتف الذكي</div>
+              <div class="card-hint">سرعة واتصال وخدمات</div>
+            </div>
+
+            <div class="drag-card" draggable="true" data-id="old">
+              <div class="visual-card">🛞</div>
+              <div class="card-title">العربة والأدوات الفخارية</div>
+              <div class="card-hint">نقل وتخزين الطعام</div>
+            </div>
+          </div>
+
+          <div class="hint-modal" id="hintBox">
+            تلميح: ابدأ بالأداة الأبسط التي استخدمها الإنسان قديمًا، ثم انتقل إلى العربة، وبعدها القطار، وأخيرًا الهاتف الذكي.
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">الخط الزمني</div>
+
+          <div class="timeline">
+            <div class="drop-zone" data-answer="very-old" data-number="1">
+              <div class="zone-name">قديم جدًا</div>
+              <div class="zone-content">ضع هنا أقدم أدوات الإنسان</div>
+            </div>
+
+            <div class="drop-zone" data-answer="old" data-number="2">
+              <div class="zone-name">قديم</div>
+              <div class="zone-content">ضع هنا أدوات النقل والتخزين القديمة</div>
+            </div>
+
+            <div class="drop-zone" data-answer="modern" data-number="3">
+              <div class="zone-name">حديث</div>
+              <div class="zone-content">ضع هنا أدوات الصناعة والنقل الحديث</div>
+            </div>
+
+            <div class="drop-zone" data-answer="very-modern" data-number="4">
+              <div class="zone-name">حديث جدًا</div>
+              <div class="zone-content">ضع هنا أدوات الاتصال والخدمات الحديثة</div>
+            </div>
+          </div>
+
+          <div class="message" id="messageBox">ابدأ الرحلة: اسحب أول بطاقة إلى مكانها الصحيح.</div>
+
+          <div class="finish" id="finishBox">
+            <h3>أحسنت يا بطل الزمن!</h3>
+            <div class="stars" id="starsBox">⭐⭐⭐</div>
+            <p id="finalText">أكملت ترتيب المراحل بنجاح.</p>
+            <button class="restart-btn" id="restartButton" type="button">إعادة اللعب 🔁</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup-card">
+      <div class="popup-emoji" id="popupEmoji">✅</div>
+      <h3 id="popupTitle">عنوان المرحلة</h3>
+      <p id="popupText">شرح المرحلة</p>
+      <button class="popup-btn" id="closePopup" type="button">متابعة</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const introScreen = document.getElementById("introScreen");
+      const gameScreen = document.getElementById("gameScreen");
+      const startButton = document.getElementById("startButton");
+      const restartButton = document.getElementById("restartButton");
+      const progressText = document.getElementById("progressText");
+      const progressFill = document.getElementById("progressFill");
+      const messageBox = document.getElementById("messageBox");
+      const finishBox = document.getElementById("finishBox");
+      const popupOverlay = document.getElementById("popupOverlay");
+      const popupEmoji = document.getElementById("popupEmoji");
+      const popupTitle = document.getElementById("popupTitle");
+      const popupText = document.getElementById("popupText");
+      const closePopup = document.getElementById("closePopup");
+      const attemptsText = document.getElementById("attemptsText");
+      const scoreText = document.getElementById("scoreText");
+      const hintButton = document.getElementById("hintButton");
+      const hintBox = document.getElementById("hintBox");
+      const starsBox = document.getElementById("starsBox");
+      const finalText = document.getElementById("finalText");
+
+      const stageInfo = {
+        "very-old": {
+          title: "المرحلة 1: قديم جدًا",
+          emoji: "🪓",
+          text: "أدوات بسيطة مثل الفأس الحجري والرمح ساعدت الإنسان على الصيد والزراعة وتلبية حاجاته الأساسية."
+        },
+        "old": {
+          title: "المرحلة 2: قديم",
+          emoji: "🛞",
+          text: "ظهرت العربة والأدوات الفخارية، فأصبح نقل الأشياء وتخزين الطعام أسهل من قبل."
+        },
+        "modern": {
+          title: "المرحلة 3: حديث",
+          emoji: "🚂",
+          text: "الآلة البخارية والقطار سرّعا النقل والإنتاج، وغيّرا طريقة عمل الناس وتنقلهم."
+        },
+        "very-modern": {
+          title: "المرحلة 4: حديث جدًا",
+          emoji: "📱",
+          text: "السيارة والهاتف الذكي وفّرا سرعة واتصالًا وخدمات كثيرة في الحياة اليومية."
+        }
+      };
+
+      let completed = 0;
+      let attempts = 0;
+      let draggedElement = null;
+
+      function playSound(type) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+
+        const audioCtx = new AudioContextClass();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        if (type === "start") {
+          oscillator.type = "triangle";
+          oscillator.frequency.setValueAtTime(360, audioCtx.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(720, audioCtx.currentTime + 0.18);
+          gainNode.gain.setValueAtTime(0.13, audioCtx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.24);
+          oscillator.start();
+          oscillator.stop(audioCtx.currentTime + 0.24);
+        }
+
+        if (type === "drag") {
+          oscillator.type = "sine";
+          oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(610, audioCtx.currentTime + 0.08);
+          gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+          oscillator.start();
+          oscillator.stop(audioCtx.currentTime + 0.12);
+        }
+
+        if (type === "correct") {
+          oscillator.type = "triangle";
+          oscillator.frequency.setValueAtTime(520, audioCtx.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.16);
+          gainNode.gain.setValueAtTime(0.14, audioCtx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.23);
+          oscillator.start();
+          oscillator.stop(audioCtx.currentTime + 0.23);
+        }
+
+        if (type === "wrong") {
+          oscillator.type = "sawtooth";
+          oscillator.frequency.setValueAtTime(230, audioCtx.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(145, audioCtx.currentTime + 0.15);
+          gainNode.gain.setValueAtTime(0.07, audioCtx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.18);
+          oscillator.start();
+          oscillator.stop(audioCtx.currentTime + 0.18);
+        }
+
+        if (type === "finish") {
+          const notes = [520, 660, 780, 980];
+          notes.forEach(function (note, index) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.type = "triangle";
+            const startTime = audioCtx.currentTime + index * 0.09;
+            osc.frequency.setValueAtTime(note, startTime);
+            gain.gain.setValueAtTime(0.12, startTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.18);
+            osc.start(startTime);
+            osc.stop(startTime + 0.18);
+          });
+        }
+      }
+
+      function updateStats() {
+        const percent = Math.round((completed / 4) * 100);
+        progressText.textContent = "التقدم: " + percent + "%";
+        progressFill.style.width = percent + "%";
+        attemptsText.textContent = "المحاولات: " + attempts;
+        scoreText.textContent = "النقاط: " + completed + " / 4";
+
+        if (completed === 4) {
+          finishBox.classList.add("show");
+          playSound("finish");
+
+          if (attempts <= 4) {
+            starsBox.textContent = "⭐⭐⭐";
+            finalText.textContent = "رائع! رتبت كل المراحل من أول محاولة تقريبًا.";
+          } else if (attempts <= 6) {
+            starsBox.textContent = "⭐⭐";
+            finalText.textContent = "ممتاز! أكملت الرحلة بعد محاولات قليلة.";
+          } else {
+            starsBox.textContent = "⭐";
+            finalText.textContent = "جيد! أكملت الرحلة وتعلمت من المحاولات.";
+          }
+        }
+      }
+
+      function showMessage(type, text) {
+        messageBox.className = "message";
+        if (type) messageBox.classList.add(type);
+        messageBox.textContent = text;
+      }
+
+      function showPopup(id) {
+        const info = stageInfo[id];
+        popupEmoji.textContent = info.emoji;
+        popupTitle.textContent = info.title;
+        popupText.textContent = info.text;
+        popupOverlay.classList.add("show");
+      }
+
+      startButton.onclick = function () {
+        introScreen.classList.add("hidden");
+        gameScreen.classList.remove("hidden");
+        playSound("start");
+      };
+
+      closePopup.onclick = function () {
+        popupOverlay.classList.remove("show");
+      };
+
+      restartButton.onclick = function () {
+        window.location.reload();
+      };
+
+      hintButton.onclick = function () {
+        hintBox.classList.toggle("show");
+      };
+
+      const cards = document.querySelectorAll(".drag-card");
+      const zones = document.querySelectorAll(".drop-zone");
+
+      cards.forEach(function (card) {
+        card.addEventListener("dragstart", function (event) {
+          draggedElement = card;
+          card.classList.add("dragging");
+          event.dataTransfer.setData("text/plain", card.getAttribute("data-id"));
+          playSound("drag");
+        });
+
+        card.addEventListener("dragend", function () {
+          card.classList.remove("dragging");
+        });
+      });
+
+      zones.forEach(function (zone) {
+        zone.addEventListener("dragover", function (event) {
+          event.preventDefault();
+          if (!zone.classList.contains("correct")) {
+            zone.classList.add("hover");
+          }
+        });
+
+        zone.addEventListener("dragleave", function () {
+          zone.classList.remove("hover");
+        });
+
+        zone.addEventListener("drop", function (event) {
+          event.preventDefault();
+          zone.classList.remove("hover");
+
+          if (!draggedElement || zone.classList.contains("correct")) return;
+
+          attempts++;
+          const selectedId = draggedElement.getAttribute("data-id");
+          const correctId = zone.getAttribute("data-answer");
+
+          if (selectedId === correctId) {
+            const info = stageInfo[selectedId];
+            const content = zone.querySelector(".zone-content");
+
+            content.innerHTML = `
+              <div class="small-result">
+                <div class="visual-card">${info.emoji}</div>
+                <div>${draggedElement.querySelector(".card-title").textContent}</div>
+              </div>
+            `;
+
+            zone.classList.add("correct");
+            draggedElement.style.display = "none";
+            completed++;
+            updateStats();
+
+            showMessage("success", "إجابة صحيحة، أحسنت! لقد وضعت المرحلة في مكانها الصحيح ضمن التسلسل الزمني.");
+            playSound("correct");
+
+            setTimeout(function () {
+              showPopup(selectedId);
+            }, 500);
+          } else {
+            updateStats();
+            showMessage("error", "إجابة خاطئة، تمعّن جيدًا بترتيب تطور الأدوات عبر الزمن، ثم حاول مرة أخرى.");
+            playSound("wrong");
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
