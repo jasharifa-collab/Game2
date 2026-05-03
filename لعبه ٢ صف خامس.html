@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تكنولوجيا من حولنا - لعبة تصنيف</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Tahoma", "Arial", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e0f7fa, #fef3c7, #fce7f3);
+      color: #1f2937;
+      overflow-x: hidden;
+    }
+
+    .game-wrapper {
+      width: min(1200px, 96%);
+      margin: 0 auto;
+      padding: 24px 0 40px;
+    }
+
+    .hero {
+      background: rgba(255, 255, 255, 0.85);
+      border: 4px solid #ffffff;
+      border-radius: 28px;
+      padding: 22px;
+      text-align: center;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      opacity: 0.25;
+      z-index: 0;
+    }
+
+    .hero::before {
+      background: #38bdf8;
+      top: -45px;
+      right: -35px;
+    }
+
+    .hero::after {
+      background: #f97316;
+      bottom: -50px;
+      left: -30px;
+    }
+
+    .hero > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: clamp(30px, 5vw, 52px);
+      color: #0f766e;
+      margin-bottom: 10px;
+    }
+
+    .instructions {
+      font-size: clamp(17px, 2.5vw, 23px);
+      line-height: 1.8;
+      color: #374151;
+      margin-bottom: 14px;
+    }
+
+    .top-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .counter {
+      background: #111827;
+      color: #ffffff;
+      border-radius: 999px;
+      padding: 12px 22px;
+      font-size: 20px;
+      font-weight: bold;
+      box-shadow: 0 8px 18px rgba(17, 24, 39, 0.22);
+    }
+
+    .sound-btn,
+    .finish-btn,
+    .reset-btn,
+    .continue-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 22px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    }
+
+    .sound-btn {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .finish-btn {
+      background: #16a34a;
+      color: #fff;
+      display: none;
+    }
+
+    .finish-btn.locked {
+      display: inline-block;
+      background: #9ca3af;
+      cursor: pointer;
+    }
+
+    .reset-btn {
+      background: #f97316;
+      color: #fff;
+    }
+
+    .continue-btn {
+      background: #0f766e;
+      color: #fff;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .cards-panel,
+    .zones-panel {
+      background: rgba(255, 255, 255, 0.78);
+      border: 3px solid #ffffff;
+      border-radius: 28px;
+      padding: 18px;
+      box-shadow: 0 16px 35px rgba(15, 23, 42, 0.10);
+    }
+
+    .panel-title {
+      font-size: 24px;
+      color: #0f172a;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+      gap: 14px;
+      min-height: 150px;
+    }
+
+    .tool-card {
+      background: #ffffff;
+      border: 3px solid #dbeafe;
+      border-radius: 22px;
+      min-height: 122px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: grab;
+      user-select: none;
+      box-shadow: 0 10px 18px rgba(59, 130, 246, 0.12);
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+      touch-action: none;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-4px) rotate(-1deg);
+      border-color: #60a5fa;
+    }
+
+    .tool-card.dragging {
+      opacity: 0.7;
+      transform: scale(1.06);
+      border-color: #f97316;
+    }
+
+    .tool-card.correct {
+      cursor: default;
+      border-color: #22c55e;
+      background: #ecfdf5;
+      box-shadow: 0 10px 18px rgba(34, 197, 94, 0.18);
+    }
+
+    .tool-icon {
+      font-size: 42px;
+      line-height: 1;
+    }
+
+    .tool-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #111827;
+    }
+
+    .zones-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .drop-zone {
+      min-height: 340px;
+      border: 4px dashed #94a3b8;
+      border-radius: 28px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.70);
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+    }
+
+    .drop-zone.active {
+      transform: scale(1.02);
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+
+    .drop-zone.correct-flash {
+      border-color: #22c55e;
+      background: #dcfce7;
+    }
+
+    .zone-header {
+      text-align: center;
+      margin-bottom: 12px;
+      padding: 12px;
+      border-radius: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .home .zone-header { background: #ef4444; }
+    .school .zone-header { background: #7c3aed; }
+    .street .zone-header { background: #0ea5e9; }
+
+    .zone-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+      gap: 10px;
+      align-items: start;
+    }
+
+    .zone-placeholder {
+      text-align: center;
+      color: #64748b;
+      font-size: 16px;
+      padding: 20px 8px;
+      line-height: 1.7;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 50;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal-box {
+      width: min(520px, 95%);
+      background: #ffffff;
+      border-radius: 30px;
+      padding: 28px 22px;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+      animation: pop 0.28s ease;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.86); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-icon {
+      font-size: 58px;
+      margin-bottom: 10px;
+    }
+
+    .modal-title {
+      font-size: 30px;
+      color: #0f766e;
+      margin-bottom: 10px;
+    }
+
+    .modal-text {
+      font-size: 21px;
+      line-height: 1.8;
+      color: #374151;
+      margin-bottom: 18px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 16px;
+      top: -20px;
+      animation: fall 1.7s linear forwards;
+      z-index: 80;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 850px) {
+      .zones-container {
+        grid-template-columns: 1fr;
+      }
+
+      .drop-zone {
+        min-height: 250px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .cards-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .tool-card {
+        min-height: 112px;
+      }
+
+      .tool-icon {
+        font-size: 36px;
+      }
+
+      .tool-name {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-wrapper">
+    <section class="hero">
+      <h1>تكنولوجيا من حولنا</h1>
+      <p class="instructions">اسحب كل أداة إلى المكان المناسب: <strong>البيت</strong> / <strong>المدرسة</strong> / <strong>الشارع</strong>.</p>
+      <div class="top-actions">
+        <div class="counter" id="counter">تم التصنيف: 0/10</div>
+        <button class="sound-btn" id="voiceBtn">🔊 استمع للتعليمات</button>
+        <button class="finish-btn locked" id="finishBtn">إنهاء</button>
+      </div>
+    </section>
+
+    <main class="main-grid">
+      <section class="cards-panel">
+        <h2 class="panel-title">بطاقات الأدوات</h2>
+        <div class="cards-container" id="cardsContainer"></div>
+      </section>
+
+      <section class="zones-panel">
+        <h2 class="panel-title">مناطق التصنيف</h2>
+        <div class="zones-container">
+          <div class="drop-zone home" data-zone="home">
+            <div class="zone-header">🏠 البيت</div>
+            <div class="zone-items" id="homeItems">
+              <div class="zone-placeholder">ضع هنا أدوات البيت</div>
+            </div>
+          </div>
+
+          <div class="drop-zone school" data-zone="school">
+            <div class="zone-header">🏫 المدرسة</div>
+            <div class="zone-items" id="schoolItems">
+              <div class="zone-placeholder">ضع هنا أدوات المدرسة</div>
+            </div>
+          </div>
+
+          <div class="drop-zone street" data-zone="street">
+            <div class="zone-header">🛣️ الشارع</div>
+            <div class="zone-items" id="streetItems">
+              <div class="zone-placeholder">ضع هنا أدوات الشارع</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-overlay" id="hintLayer">
+    <div class="modal-box">
+      <div class="modal-icon">💡</div>
+      <h2 class="modal-title">تلميح</h2>
+      <p class="modal-text">اسأل نفسك: أين تُستخدم هذه الأداة غالبًا؟</p>
+      <button class="continue-btn" onclick="closeModal('hintLayer')">متابعة</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="summaryLayer">
+    <div class="modal-box">
+      <div class="modal-icon">🎉</div>
+      <h2 class="modal-title">أحسنت!</h2>
+      <p class="modal-text">صنّفتَ 10 من 10 بشكل صحيح.</p>
+      <div class="modal-actions">
+        <button class="reset-btn" onclick="restartGame()">إعادة</button>
+        <button class="finish-btn" style="display:inline-block" onclick="finishGame()">إنهاء</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="tryAgainLayer">
+    <div class="modal-box">
+      <div class="modal-icon">🙂</div>
+      <h2 class="modal-title">تابع المحاولة</h2>
+      <p class="modal-text">ما زالت هناك بطاقات غير مصنفة.</p>
+      <button class="continue-btn" onclick="closeModal('tryAgainLayer')">متابعة</button>
+    </div>
+  </div>
+
+  <script>
+    const tools = [
+      { id: "fridge", name: "ثلاجة", icon: "🧊", zone: "home" },
+      { id: "washer", name: "غسالة", icon: "🧺", zone: "home" },
+      { id: "tv", name: "تلفاز", icon: "📺", zone: "home" },
+      { id: "phone", name: "هاتف", icon: "📱", zone: "home" },
+      { id: "computer", name: "حاسوب", icon: "💻", zone: "school" },
+      { id: "printer", name: "طابعة", icon: "🖨️", zone: "school" },
+      { id: "projector", name: "عارض", icon: "📽️", zone: "school" },
+      { id: "traffic", name: "إشارة مرور", icon: "🚦", zone: "street" },
+      { id: "car", name: "سيارة", icon: "🚗", zone: "street" },
+      { id: "camera", name: "كاميرا مراقبة", icon: "📹", zone: "street" }
+    ];
+
+    const cardsContainer = document.getElementById("cardsContainer");
+    const counter = document.getElementById("counter");
+    const finishBtn = document.getElementById("finishBtn");
+    const voiceBtn = document.getElementById("voiceBtn");
+    const dropZones = document.querySelectorAll(".drop-zone");
+    let correctCount = 0;
+    let draggedCard = null;
+
+    function shuffle(array) {
+      return [...array].sort(() => Math.random() - 0.5);
+    }
+
+    function buildCards() {
+      cardsContainer.innerHTML = "";
+      shuffle(tools).forEach(tool => {
+        const card = document.createElement("div");
+        card.className = "tool-card";
+        card.draggable = true;
+        card.id = tool.id;
+        card.dataset.zone = tool.zone;
+        card.innerHTML = `
+          <div class="tool-icon">${tool.icon}</div>
+          <div class="tool-name">${tool.name}</div>
+        `;
+
+        card.addEventListener("dragstart", handleDragStart);
+        card.addEventListener("dragend", handleDragEnd);
+
+        // دعم اللمس للموبايل والتابلت
+        card.addEventListener("touchstart", handleTouchStart, { passive: false });
+        card.addEventListener("touchmove", handleTouchMove, { passive: false });
+        card.addEventListener("touchend", handleTouchEnd);
+
+        cardsContainer.appendChild(card);
+      });
+    }
+
+    function handleDragStart(e) {
+      if (this.classList.contains("correct")) return;
+      draggedCard = this;
+      this.classList.add("dragging");
+      e.dataTransfer.setData("text/plain", this.id);
+    }
+
+    function handleDragEnd() {
+      this.classList.remove("dragging");
+      draggedCard = null;
+    }
+
+    dropZones.forEach(zone => {
+      zone.addEventListener("dragover", e => {
+        e.preventDefault();
+        zone.classList.add("active");
+      });
+
+      zone.addEventListener("dragleave", () => {
+        zone.classList.remove("active");
+      });
+
+      zone.addEventListener("drop", e => {
+        e.preventDefault();
+        zone.classList.remove("active");
+        const cardId = e.dataTransfer.getData("text/plain");
+        const card = document.getElementById(cardId);
+        checkDrop(card, zone);
+      });
+    });
+
+    function checkDrop(card, zone) {
+      if (!card || card.classList.contains("correct")) return;
+
+      const correctZone = card.dataset.zone;
+      const selectedZone = zone.dataset.zone;
+
+      if (correctZone === selectedZone) {
+        correctDrop(card, zone);
+      } else {
+        wrongDrop(card);
+      }
+    }
+
+    function correctDrop(card, zone) {
+      removePlaceholder(zone);
+      zone.querySelector(".zone-items").appendChild(card);
+      card.classList.add("correct");
+      card.draggable = false;
+      correctCount++;
+      updateCounter();
+      playSuccessSound();
+
+      zone.classList.add("correct-flash");
+      setTimeout(() => zone.classList.remove("correct-flash"), 450);
+
+      if (correctCount === tools.length) {
+        finishBtn.classList.remove("locked");
+        finishBtn.style.display = "inline-block";
+        createConfetti();
+        setTimeout(() => openModal("summaryLayer"), 550);
+      }
+    }
+
+    function wrongDrop(card) {
+      playErrorSound();
+      card.animate([
+        { transform: "translateX(0)" },
+        { transform: "translateX(12px)" },
+        { transform: "translateX(-12px)" },
+        { transform: "translateX(0)" }
+      ], {
+        duration: 280,
+        iterations: 1
+      });
+      openModal("hintLayer");
+    }
+
+    function removePlaceholder(zone) {
+      const placeholder = zone.querySelector(".zone-placeholder");
+      if (placeholder) placeholder.remove();
+    }
+
+    function updateCounter() {
+      counter.textContent = `تم التصنيف: ${correctCount}/${tools.length}`;
+    }
+
+    finishBtn.addEventListener("click", () => {
+      if (correctCount < tools.length) {
+        openModal("tryAgainLayer");
+      } else {
+        openModal("summaryLayer");
+      }
+    });
+
+    function openModal(id) {
+      document.getElementById(id).classList.add("show");
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("show");
+    }
+
+    function restartGame() {
+      correctCount = 0;
+      updateCounter();
+      finishBtn.classList.add("locked");
+      finishBtn.style.display = "inline-block";
+      closeModal("summaryLayer");
+
+      document.querySelectorAll(".zone-items").forEach(zoneItems => {
+        zoneItems.innerHTML = '<div class="zone-placeholder">ضع هنا الأدوات المناسبة</div>';
+      });
+
+      buildCards();
+    }
+
+    function finishGame() {
+      alert("انتهت اللعبة بنجاح! أحسنت 👏");
+      closeModal("summaryLayer");
+    }
+
+    // Voice-over باستخدام Web Speech API
+    voiceBtn.addEventListener("click", () => {
+      const text = "اسحب كل أداة وضعها في المكان الذي نستخدمها فيه غالبًا. إذا أخطأت ستظهر لك ملاحظة تساعدك.";
+      speakArabic(text);
+    });
+
+    function speakArabic(text) {
+      if (!window.speechSynthesis) {
+        alert("المتصفح لا يدعم تشغيل الصوت تلقائيًا.");
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "ar-SA";
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function playSuccessSound() {
+      playTone(660, 0.12, "sine");
+      setTimeout(() => playTone(880, 0.14, "sine"), 120);
+    }
+
+    function playErrorSound() {
+      playTone(220, 0.18, "square");
+    }
+
+    function playTone(frequency, duration, type) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+      const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+      oscillator.type = type;
+      oscillator.frequency.value = frequency;
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+      oscillator.connect(gain);
+      gain.connect(ctx.destination);
+      oscillator.start();
+      oscillator.stop(ctx.currentTime + duration);
+    }
+
+    function createConfetti() {
+      const colors = ["#ef4444", "#22c55e", "#3b82f6", "#f97316", "#a855f7", "#eab308"];
+      for (let i = 0; i < 55; i++) {
+        const piece = document.createElement("div");
+        piece.className = "confetti";
+        piece.style.left = Math.random() * 100 + "vw";
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDelay = Math.random() * 0.6 + "s";
+        piece.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
+        document.body.appendChild(piece);
+        setTimeout(() => piece.remove(), 2400);
+      }
+    }
+
+    // دعم السحب باللمس
+    let touchClone = null;
+    let touchOriginal = null;
+
+    function handleTouchStart(e) {
+      if (this.classList.contains("correct")) return;
+      e.preventDefault();
+      touchOriginal = this;
+      touchClone = this.cloneNode(true);
+      touchClone.style.position = "fixed";
+      touchClone.style.width = this.offsetWidth + "px";
+      touchClone.style.pointerEvents = "none";
+      touchClone.style.zIndex = "100";
+      touchClone.style.opacity = "0.85";
+      touchClone.classList.add("dragging");
+      document.body.appendChild(touchClone);
+      moveTouchClone(e.touches[0]);
+    }
+
+    function handleTouchMove(e) {
+      if (!touchClone) return;
+      e.preventDefault();
+      moveTouchClone(e.touches[0]);
+    }
+
+    function handleTouchEnd(e) {
+      if (!touchClone || !touchOriginal) return;
+
+      const touch = e.changedTouches[0];
+      touchClone.style.display = "none";
+      const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+      const zone = elementBelow ? elementBelow.closest(".drop-zone") : null;
+
+      if (zone) {
+        checkDrop(touchOriginal, zone);
+      }
+
+      touchClone.remove();
+      touchClone = null;
+      touchOriginal = null;
+    }
+
+    function moveTouchClone(touch) {
+      touchClone.style.left = touch.clientX - touchClone.offsetWidth / 2 + "px";
+      touchClone.style.top = touch.clientY - touchClone.offsetHeight / 2 + "px";
+    }
+
+    // بدء اللعبة
+    buildCards();
+    finishBtn.style.display = "inline-block";
+  </script>
+</body>
+</html>
